@@ -111,7 +111,7 @@ export const subscriberService = {
     }
 
     const { error: updateError } = await supabase
-      .rpc<void>('increment_subscriber_spent', {
+      .rpc<void, IncrementSpentParams>('increment_subscriber_spent', {
         subscriber_id: subscriberId,
         amount: amount
       });
