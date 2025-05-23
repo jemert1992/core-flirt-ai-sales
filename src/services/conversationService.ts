@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Conversation, Message } from '@/types/supabase';
 import { nlpService } from './nlpService';
 import { contentService } from './contentService';
+import { Json } from '@/integrations/supabase/types';
 
 export const conversationService = {
   // Get conversation by ID
@@ -18,7 +19,17 @@ export const conversationService = {
       return null;
     }
     
-    return data as Conversation;
+    // Convert the Json[] messages to Message[]
+    const conversation = data as any;
+    if (conversation && Array.isArray(conversation.messages)) {
+      conversation.messages = conversation.messages.map((msg: any) => ({
+        role: msg.role,
+        content: msg.content,
+        timestamp: msg.timestamp
+      }));
+    }
+    
+    return conversation as Conversation;
   },
   
   // Get conversations by subscriber
@@ -33,12 +44,24 @@ export const conversationService = {
       return [];
     }
     
-    return data as Conversation[];
+    // Convert the Json[] messages to Message[] for each conversation
+    const conversations = data as any[];
+    conversations.forEach(conversation => {
+      if (conversation && Array.isArray(conversation.messages)) {
+        conversation.messages = conversation.messages.map((msg: any) => ({
+          role: msg.role,
+          content: msg.content,
+          timestamp: msg.timestamp
+        }));
+      }
+    });
+    
+    return conversations as Conversation[];
   },
   
   // Create new conversation
   createConversation: async (subscriberId: string, modelId: string, initialMessage?: string): Promise<Conversation | null> => {
-    const messages: Message[] = [];
+    const messages: any[] = [];
     
     if (initialMessage) {
       messages.push({
@@ -62,7 +85,17 @@ export const conversationService = {
       return null;
     }
     
-    return data[0] as Conversation;
+    // Convert the Json[] messages to Message[]
+    const conversation = data[0] as any;
+    if (conversation && Array.isArray(conversation.messages)) {
+      conversation.messages = conversation.messages.map((msg: any) => ({
+        role: msg.role,
+        content: msg.content,
+        timestamp: msg.timestamp
+      }));
+    }
+    
+    return conversation as Conversation;
   },
   
   // Add message to conversation
@@ -83,11 +116,18 @@ export const conversationService = {
     // Add the message to the conversation
     const messages = [...conversation.messages, newMessage];
     
+    // Convert Message[] to Json[] for storage
+    const jsonMessages = messages.map(msg => ({
+      role: msg.role,
+      content: msg.content,
+      timestamp: msg.timestamp
+    })) as any[];
+    
     // Update the conversation
     const { error } = await supabase
       .from('conversations')
       .update({
-        messages,
+        messages: jsonMessages,
         last_interaction: new Date().toISOString()
       })
       .eq('id', conversationId);

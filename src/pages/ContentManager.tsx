@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -10,7 +9,7 @@ import { Model, ContentItem } from '@/types/supabase';
 import { modelService } from '@/services/modelService';
 import { contentService } from '@/services/contentService';
 import { useToast } from "@/hooks/use-toast";
-import { Plus, Save, Trash2, Tag, Image, Video } from 'lucide-react';
+import { Plus, Save, Trash2, Tag, Image, Video, X } from 'lucide-react';
 
 export const ContentManager = () => {
   const { toast } = useToast();
