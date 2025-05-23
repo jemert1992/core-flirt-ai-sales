@@ -9,7 +9,7 @@ export const nlpService = {
     conversationHistory: Message[],
     modelBio: Record<string, any>,
     noGoTopics: string[]
-  ): Promise<string> {
+  ) => {
     // In a real implementation, this would call an NLP API
     console.log('Generating response based on:', { conversationHistory, modelBio, noGoTopics });
     
@@ -42,7 +42,7 @@ export const nlpService = {
     conversationHistory: Message[],
     modelId: string,
     keywords: string[] = []
-  ): Promise<string | null> {
+  ) => {
     console.log('Matching content for keywords:', keywords);
     
     // Extract potential keywords from the last few messages
