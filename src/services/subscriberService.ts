@@ -104,13 +104,13 @@ export const subscriberService = {
   // Record a tip from a subscriber
   recordTip: async (subscriberId: string, modelId: string, amount: number): Promise<boolean> => {
     // Update the subscriber's total spent
-    const { error: updateError } = await supabase.rpc<{
-      subscriber_id: string;
-      amount: number;
-    }, null>('increment_subscriber_spent', { 
-      subscriber_id: subscriberId, 
-      amount: amount 
-    });
+    const { error: updateError } = await supabase.rpc(
+      'increment_subscriber_spent', 
+      { 
+        subscriber_id: subscriberId, 
+        amount: amount 
+      }
+    );
     
     if (updateError) {
       console.error('Error updating subscriber spent:', updateError);
