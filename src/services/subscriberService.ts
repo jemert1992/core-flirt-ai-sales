@@ -104,13 +104,13 @@ export const subscriberService = {
   // Record a tip from a subscriber
   recordTip: async (subscriberId: string, modelId: string, amount: number): Promise<boolean> => {
     // Update the subscriber's total spent
-    type IncrementParams = { subscriber_id: string; amount: number };
-    
     const { error: updateError } = await supabase
-      .rpc('increment_subscriber_spent', { 
-        subscriber_id: subscriberId, 
-        amount 
-      } as IncrementParams);
+      .rpc('increment_subscriber_spent', {
+        subscriber_id: subscriberId,
+        amount
+      }, {
+        head: false  // Add an options parameter to avoid type inference issues
+      });
     
     if (updateError) {
       console.error('Error updating subscriber spent:', updateError);
