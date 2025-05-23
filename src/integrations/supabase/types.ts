@@ -9,7 +9,201 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      content: {
+        Row: {
+          content_type: string
+          content_url: string
+          created_at: string
+          description: string | null
+          id: string
+          keywords: string[] | null
+          model_id: string
+          price: number | null
+          title: string
+        }
+        Insert: {
+          content_type: string
+          content_url: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          keywords?: string[] | null
+          model_id: string
+          price?: number | null
+          title: string
+        }
+        Update: {
+          content_type?: string
+          content_url?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          keywords?: string[] | null
+          model_id?: string
+          price?: number | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "content_model_id_fkey"
+            columns: ["model_id"]
+            isOneToOne: false
+            referencedRelation: "models"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conversations: {
+        Row: {
+          created_at: string
+          id: string
+          last_interaction: string | null
+          messages: Json[]
+          model_id: string
+          subscriber_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_interaction?: string | null
+          messages?: Json[]
+          model_id: string
+          subscriber_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_interaction?: string | null
+          messages?: Json[]
+          model_id?: string
+          subscriber_id?: string
+        }
+        Relationships: []
+      }
+      models: {
+        Row: {
+          bio: Json
+          created_at: string
+          id: string
+          name: string
+          no_go_topics: string[] | null
+          preferences: Json
+          services: Json
+          updated_at: string
+        }
+        Insert: {
+          bio?: Json
+          created_at?: string
+          id?: string
+          name: string
+          no_go_topics?: string[] | null
+          preferences?: Json
+          services?: Json
+          updated_at?: string
+        }
+        Update: {
+          bio?: Json
+          created_at?: string
+          id?: string
+          name?: string
+          no_go_topics?: string[] | null
+          preferences?: Json
+          services?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      subscribers: {
+        Row: {
+          created_at: string
+          do_not_message: boolean | null
+          external_id: string
+          id: string
+          last_purchase: string | null
+          name: string | null
+          tier: string | null
+          total_spent: number | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          do_not_message?: boolean | null
+          external_id: string
+          id?: string
+          last_purchase?: string | null
+          name?: string | null
+          tier?: string | null
+          total_spent?: number | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          do_not_message?: boolean | null
+          external_id?: string
+          id?: string
+          last_purchase?: string | null
+          name?: string | null
+          tier?: string | null
+          total_spent?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      transactions: {
+        Row: {
+          amount: number
+          content_id: string | null
+          created_at: string
+          external_transaction_id: string | null
+          id: string
+          model_id: string
+          subscriber_id: string
+          transaction_type: string
+        }
+        Insert: {
+          amount: number
+          content_id?: string | null
+          created_at?: string
+          external_transaction_id?: string | null
+          id?: string
+          model_id: string
+          subscriber_id: string
+          transaction_type: string
+        }
+        Update: {
+          amount?: number
+          content_id?: string | null
+          created_at?: string
+          external_transaction_id?: string | null
+          id?: string
+          model_id?: string
+          subscriber_id?: string
+          transaction_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transactions_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "content"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "transactions_model_id_fkey"
+            columns: ["model_id"]
+            isOneToOne: false
+            referencedRelation: "models"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "transactions_subscriber_id_fkey"
+            columns: ["subscriber_id"]
+            isOneToOne: false
+            referencedRelation: "subscribers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
